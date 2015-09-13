@@ -44,7 +44,6 @@
 #define        MASK_FIFO_STATUS_AFULL		0x08
 
 #include "rtthread.h"
-
 #define LD_num  49
 #define Name_ini "/sys/name.ini"
 typedef struct 
@@ -74,7 +73,7 @@ uint8 LD_AsrAddFixed(char cmd);
 uint8 LD_GetResult(void);
 uint8 RunASR(char cmd);
 uint8 LD_Check_ASRBusyFlag_b2(void);
-int wugege_read_line(int fd_num);
+int wugege_read_line(int fd_num,char *vptr,unsigned int maxlen);
 char wugege_read_ini(char *path);
 char get_mps_ini_file(char *mp3_name,char *ini_name,char *atcion,char index);
 void LD_AsrAddFixed_ByString(char * pRecogString, uint8 k);

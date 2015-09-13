@@ -512,15 +512,43 @@ void LD_TEST(void)
 //
 }
 
-
-static	int fd1,wu_fd;
+int fd1,wu_fd;
 uint8  LD_struct_index;
 static	char line_data[100];
 void LD_ReloadMp3Data_Again(void);
 LD_struct ld_struct[LD_num];
 
-int wugege_read_line(int fd_num)
+int wugege_read_line(int fd_num,char *vptr,unsigned int maxlen)
 {
+	unsigned int rc_num;
+	char c_data;
+		unsigned int n=0;
+	  char	*ptr=vptr;
+		for(n=0;n<maxlen;n++)
+			{
+//				again:
+					if((rc_num=read(fd_num,&c_data,1))==1)
+					{
+						*ptr=c_data;
+						ptr++;
+					if(c_data==0x0d)
+						break;
+				}
+					else if (rc_num==0)
+						{
+						ptr='\0';
+						return (n-1);
+						}
+					else
+						{
+						ptr='\0';
+						return -1;
+						}
+						
+			}
+		ptr='\0';
+		return n;
+			/*
 		char *ptr;
 		double result;
 		double	read_num;
@@ -537,7 +565,7 @@ int wugege_read_line(int fd_num)
 			return 0;
 		 lseek(fd_num,((result-read_num+2)), SEEK_CUR);
 			return 1 ;
-
+*/
 }
 char wugege_read_ini(char *path)
 {
@@ -561,7 +589,7 @@ char wugege_read_ini(char *path)
 	}
 	 LD_struct_index=0;
 	 memset(ld_struct,'\0',sizeof(LD_struct)*LD_num);
-	while(wugege_read_line(wu_fd))
+	while(wugege_read_line(wu_fd,line_data,sizeof(line_data)))
 	{
 		inner_ptr=line_data;
 		outer_ptr=strchr(inner_ptr,':');
